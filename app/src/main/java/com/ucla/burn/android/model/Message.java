@@ -1,26 +1,38 @@
 package com.ucla.burn.android.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import firebomb.annotation.Entity;
+import firebomb.annotation.GeneratedValue;
+import firebomb.annotation.Id;
+import firebomb.annotation.ManyToOne;
+import firebomb.annotation.NonNull;
+import firebomb.annotation.OneToMany;
+
+@Entity
 public class Message {
-    private boolean id;
+    private String id;
     private Conversation conversation;
     private int index;
-    private boolean isContext;
-    private boolean isPrimary;
+    private boolean isContext = true;
+    private boolean isPrimary = true;
     private String text;
     private String imgUrl;
     private String selectedSuggestionId;
-    private List<Suggestion> suggestions;
+    private List<Suggestion> suggestions = new ArrayList<>();
 
-    public boolean isId() {
+    @Id
+    @GeneratedValue
+    public String getId() {
         return id;
     }
 
-    public void setId(boolean id) {
+    public void setId(String id) {
         this.id = id;
     }
 
+    @ManyToOne(foreignIndexName = "messages")
     public Conversation getConversation() {
         return conversation;
     }
@@ -29,6 +41,7 @@ public class Message {
         this.conversation = conversation;
     }
 
+    @NonNull
     public int getIndex() {
         return index;
     }
@@ -37,6 +50,7 @@ public class Message {
         this.index = index;
     }
 
+    @NonNull
     public boolean isContext() {
         return isContext;
     }
@@ -45,6 +59,7 @@ public class Message {
         isContext = context;
     }
 
+    @NonNull
     public boolean isPrimary() {
         return isPrimary;
     }
@@ -77,6 +92,7 @@ public class Message {
         this.selectedSuggestionId = selectedSuggestionId;
     }
 
+    @OneToMany(foreignFieldName = "message")
     public List<Suggestion> getSuggestions() {
         return suggestions;
     }
