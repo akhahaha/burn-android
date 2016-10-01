@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">Burn</string>
+    <string name="facebook_app_id">657326144431323</string>
+
+    <string name="pref_file_name">com.ucla.bunch.android.PREFERENCES</string>
+    <string name="pref_key_curr_uid">PREF_KEY_CURR_UID</string>
+
+    <string name="title_activity_login">Login</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="content_desc_burn_logo">Burn logo</string>
 </resources>

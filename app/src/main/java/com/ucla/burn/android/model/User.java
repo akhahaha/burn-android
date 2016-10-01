@@ -11,6 +11,7 @@ import firebomb.annotation.OneToMany;
 @Entity
 public class User {
     private String id;
+    private String displayName;
     private String email;
     private List<Conversation> conversations = new ArrayList<>();
     private List<Suggestion> suggestions = new ArrayList<>();
@@ -24,7 +25,14 @@ public class User {
         this.id = id;
     }
 
-    @NonNull
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getEmail() {
         return email;
     }
