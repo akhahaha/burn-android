@@ -34,7 +34,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ConversationActivity"
-            android:label="Conversations" />
+            android:label="Conversations"
+            android:windowSoftInputMode="adjustPan"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

@@ -14,13 +14,13 @@
 
    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="450dp"
        android:fillViewport="true">
         <LinearLayout
             android:orientation="vertical"
             android:id="@+id/convo_holder_linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="400dp"
             >
         </LinearLayout>
    </ScrollView>
@@ -33,7 +33,10 @@
         >
 
     </com.ucla.burn.android.WrapContentViewPager>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/divier"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -44,19 +47,11 @@
             android:layout_weight="0.8"
             android:layout_height="wrap_content"
             tools:text="Insert text here......"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add suggestion"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add to context"/>
-        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>
