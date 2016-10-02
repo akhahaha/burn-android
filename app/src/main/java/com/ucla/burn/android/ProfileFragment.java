@@ -2,6 +2,9 @@ package com.ucla.burn.android;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,22 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.ucla.burn.android.adapter.ConversationListAdapter;
 import com.ucla.burn.android.data.BurnDAO;
 import com.ucla.burn.android.data.Callback;
 import com.ucla.burn.android.model.Conversation;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,22 +42,15 @@ public class ProfileFragment extends Fragment {
 
     private static final String EXTRA_TITLE = "EXTRA_TITLE";
 
-    private RecyclerView conversationListView;
-    private ConversationListAdapter conversationListAdapter;
+    private RoundedImageView mProfilePicture;
+    private TextView mProfileName;
 //    private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PopularFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(int position) {
         ProfileFragment fragment = new ProfileFragment();
@@ -69,52 +67,45 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.content_main, container, false);
-
-        conversationListView = (RecyclerView) rootView.findViewById(R.id.conversation_list_view);
-        conversationListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        Button newconvo = (Button) rootView.findViewById(R.id.itm_newconvo);
-        newconvo.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), InputActivity.class);
-                startActivity(intent);
-            }
-        }));
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        mProfilePicture = (RoundedImageView) rootView.findViewById(R.id.user_profile_picture_image_view);
+        mProfileName = (TextView) rootView.findViewById(R.id.user_name_text_view);
+        if(Profile.getCurrentProfile()!=null) {
+            new ProfilePicFetcherTask().execute(Profile.getCurrentProfile().getProfilePictureUri(300, 300).toString());
+            mProfileName.setText(Profile.getCurrentProfile().getName());
+        }
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        refresh();
-    }
-
-    public void refresh() {
-        BurnDAO.getConversations(new Callback<List<Conversation>>() {
-            @Override
-            public void onResponse(List<Conversation> conversations) {
-                conversationListAdapter = new ConversationListAdapter(conversations);
-                conversationListAdapter.setOnItemClickListener(
-                        new ConversationListAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, Conversation conversation, int position) {
-                                Intent intent = new Intent(getActivity(), ConversationActivity.class);
-                                Bundle extras = new Bundle();
-                                extras.putString(EXTRA_TITLE, conversation.getTitle());
-                                startActivity(intent);
-                            }
-                        });
-                conversationListView.setAdapter(conversationListAdapter);
+    private class ProfilePicFetcherTask extends AsyncTask<String,Void,Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            HttpURLConnection urlConnection;
+            try {
+                urlConnection = (HttpURLConnection) new URL(params[0]).openConnection();
+                InputStream inputStream = urlConnection.getInputStream();
+                Bitmap b = BitmapFactory.decodeStream(inputStream);
+                urlConnection.disconnect();
+                return b;
             }
-
-            @Override
-            public void onFailed(Exception e) {
+            catch (MalformedURLException m){
 
             }
-        });
+            catch (IOException i){
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            mProfilePicture.setImageBitmap(bitmap);
+        }
     }
+
+
 
 //
 //    // TODO: Rename method, update argument and hook method into UI event
