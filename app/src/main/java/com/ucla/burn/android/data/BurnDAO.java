@@ -1,13 +1,12 @@
 package com.ucla.burn.android.data;
 
-import android.telecom.Call;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ucla.burn.android.model.Conversation;
 import com.ucla.burn.android.model.Message;
+import com.ucla.burn.android.model.Suggestion;
 import com.ucla.burn.android.model.User;
 
 import java.util.List;
@@ -140,5 +139,23 @@ public class BurnDAO {
                         return null;
                     }
                 });
+    }
+
+    public static void getSuggestion(String id, final Callback<Suggestion> callback) {
+        Firebomb.getInstance().find(Suggestion.class, id)
+                .thenAccept(new Consumer<Suggestion>() {
+                    @Override
+                    public void accept(Suggestion suggestion) {
+                        if (callback != null) callback.onResponse(suggestion);
+                    }
+                })
+                .exceptionally(new Function<Throwable, Void>() {
+                    @Override
+                    public Void apply(Throwable throwable) {
+                        if (callback != null) callback.onFailed(new Exception(throwable));
+                        return null;
+                    }
+                });
+
     }
 }
