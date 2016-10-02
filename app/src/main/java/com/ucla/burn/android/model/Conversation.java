@@ -2,22 +2,29 @@ package com.ucla.burn.android.model;
 
 import com.ucla.burn.android.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import firebomb.annotation.Entity;
 import firebomb.annotation.GeneratedValue;
 import firebomb.annotation.Id;
 import firebomb.annotation.Ignore;
-import firebomb.annotation.ManyToMany;
+import firebomb.annotation.ManyToOne;
 import firebomb.annotation.NonNull;
 import firebomb.annotation.OneToMany;
+import firebomb.annotation.Property;
 
 @Entity
 public class Conversation {
+    private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm zzz";
+    private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, Locale.US);
+
     private String id;
     private User owner;
     private String title;
@@ -68,7 +75,7 @@ public class Conversation {
         this.title = title;
     }
 
-    @ManyToMany(foreignIndexName = "conversations")
+    @ManyToOne(foreignIndexName = "conversations")
     public User getOwner() {
         return owner;
     }
@@ -104,13 +111,30 @@ public class Conversation {
         isCompleted = completed;
     }
 
-    @NonNull
+    @Ignore
     public Date getLastActive() {
         return lastActive;
     }
 
     public void setLastActive(Date lastActive) {
         this.lastActive = lastActive;
+    }
+
+    @Property("lastActive")
+    @NonNull
+    public String getLastActiveString() {
+        if (lastActive == null) {
+            return null;
+        }
+        return SDF.format(lastActive);
+    }
+
+    public void setLastActiveString(String lastActiveString) {
+        try {
+            this.lastActive = SDF.parse(lastActiveString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @OneToMany(foreignFieldName = "conversation")
@@ -132,11 +156,14 @@ public class Conversation {
         return upvotingUserIds.size();
     }
 
-    public Set<String> getUpvotingUserIds() {
-        return upvotingUserIds;
+    public List<String> getUpvotingUserIds() {
+        List<String> userIds = new ArrayList<>();
+        userIds.addAll(upvotingUserIds);
+        return userIds;
     }
 
-    public void setUpvotingUserIds(Set<String> upvotingUserIds) {
-        this.upvotingUserIds = upvotingUserIds;
+    public void setUpvotingUserIds(List<String> upvotingUserIds) {
+        this.upvotingUserIds.clear();
+        this.upvotingUserIds.addAll(upvotingUserIds);
     }
 }

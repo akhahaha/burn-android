@@ -25,6 +25,7 @@ public class User {
         this.id = id;
     }
 
+    @NonNull
     public String getDisplayName() {
         return displayName;
     }
