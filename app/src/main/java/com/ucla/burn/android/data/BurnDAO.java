@@ -233,4 +233,54 @@ public class BurnDAO {
                 });
 
     }
+
+    public static void getConversationSuggestions(String conversationId,
+                                                  final Callback<List<Suggestion>> callback) {
+        Firebomb.getInstance().find(Conversation.class, conversationId)
+                .thenCompose(new Function<Conversation, CompletableFuture<Message>>() {
+                    @Override
+                    public CompletableFuture<Message> apply(Conversation conversation) {
+                        if (conversation == null || conversation.getMessages().isEmpty()) {
+                            if (callback != null) callback.onResponse(new ArrayList<Suggestion>());
+                            return null;
+                        }
+
+                        // Get last message Id
+                        String messageId = conversation.getMessages()
+                                .get(conversation.getMessages().size() - 1).getId();
+                        return Firebomb.getInstance().find(Message.class, messageId);
+                    }
+                })
+                .thenAccept(new Consumer<Message>() {
+                    @Override
+                    public void accept(Message message) {
+                        if (message.isContext() || message.getSuggestions().isEmpty()) {
+                            if (callback != null) callback.onResponse(new ArrayList<Suggestion>());
+                            return;
+                        }
+
+                        final List<Suggestion> suggestions = new ArrayList<Suggestion>();
+                        CompletableFuture<?>[] suggestionPromises =
+                                new CompletableFuture<?>[message.getSuggestions().size()];
+                        for (int i = 0; i < message.getSuggestions().size(); i++) {
+                            suggestionPromises[i] = Firebomb.getInstance().find(Suggestion.class,
+                                    message.getSuggestions().get(i).getId())
+                                    .thenAccept(new Consumer<Suggestion>() {
+                                        @Override
+                                        public void accept(Suggestion suggestion) {
+                                            suggestions.add(suggestion);
+                                        }
+                                    });
+                        }
+
+                        CompletableFuture.allOf(suggestionPromises)
+                                .thenAccept(new Consumer<Void>() {
+                                    @Override
+                                    public void accept(Void aVoid) {
+                                        if (callback != null) callback.onResponse(suggestions);
+                                    }
+                                });
+                    }
+                });
+    }
 }
