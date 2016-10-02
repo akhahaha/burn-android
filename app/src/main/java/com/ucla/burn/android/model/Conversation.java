@@ -1,20 +1,17 @@
 package com.ucla.burn.android.model;
 
-import com.ucla.burn.android.R;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import firebomb.annotation.Entity;
 import firebomb.annotation.GeneratedValue;
 import firebomb.annotation.Id;
 import firebomb.annotation.Ignore;
+import firebomb.annotation.ManyToMany;
 import firebomb.annotation.ManyToOne;
 import firebomb.annotation.NonNull;
 import firebomb.annotation.OneToMany;
@@ -33,29 +30,7 @@ public class Conversation {
     private boolean isCompleted = false;
     private Date lastActive;
     private List<Message> messages = new ArrayList<>();
-    private Set<String> upvotingUserIds = new HashSet<>();
-
-    private static final int icon = R.drawable.ic_sentiment_satisfied_black_36dp;
-
-    private static final String[] titles = {"first", "second", "third"};
-
-    private static final String[] conversations = {"asdfasfd", "dsfasdf", "dfadsfasf"};
-
-    public static List<ListItem> getListData() {
-        List<ListItem> data = new ArrayList<>();
-
-        for (int x = 0; x < 4; x++) {
-            for (int i = 0; i < titles.length; i++) {
-                ListItem item = new ListItem();
-                item.setImageResId(icon);
-                item.setTitle(titles[i]);
-                item.setSubTitle(conversations[i]);
-                data.add(item);
-            }
-        }
-
-        return data;
-    }
+    private List<User> upvotingUsers = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -151,19 +126,28 @@ public class Conversation {
         messages.add(message);
     }
 
-    @Ignore
     public int getScore() {
-        return upvotingUserIds.size();
+        return upvotingUsers.size();
     }
 
-    public List<String> getUpvotingUserIds() {
-        List<String> userIds = new ArrayList<>();
-        userIds.addAll(upvotingUserIds);
-        return userIds;
+    public boolean hasVote(User user) {
+        return upvotingUsers.contains(user);
     }
 
-    public void setUpvotingUserIds(List<String> upvotingUserIds) {
-        this.upvotingUserIds.clear();
-        this.upvotingUserIds.addAll(upvotingUserIds);
+    public void setVote(User user, boolean isUpVote) {
+        if (isUpVote) {
+            upvotingUsers.add(user);
+        } else {
+            upvotingUsers.remove(user);
+        }
+    }
+
+    @ManyToMany(foreignIndexName = "conversationUpvotes")
+    public List<User> getUpvotingUsers() {
+        return upvotingUsers;
+    }
+
+    public void setUpvotingUsers(List<User> upvotingUsers) {
+        this.upvotingUsers = upvotingUsers;
     }
 }

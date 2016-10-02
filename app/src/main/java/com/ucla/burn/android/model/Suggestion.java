@@ -4,15 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import firebomb.annotation.Entity;
 import firebomb.annotation.GeneratedValue;
 import firebomb.annotation.Id;
 import firebomb.annotation.Ignore;
+import firebomb.annotation.ManyToMany;
 import firebomb.annotation.ManyToOne;
 import firebomb.annotation.NonNull;
 import firebomb.annotation.Property;
@@ -27,7 +26,7 @@ public class Suggestion {
     private User suggester;
     private String text;
     private Date created;
-    private Set<String> upvotingUserIds = new HashSet<>();
+    private List<User> upvotingUsers = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -92,19 +91,28 @@ public class Suggestion {
         }
     }
 
-    @Ignore
     public int getScore() {
-        return upvotingUserIds.size();
+        return upvotingUsers.size();
     }
 
-    public List<String> getUpvotingUserIds() {
-        List<String> userIds = new ArrayList<>();
-        userIds.addAll(upvotingUserIds);
-        return userIds;
+    public boolean hasVote(User user) {
+        return upvotingUsers.contains(user);
     }
 
-    public void setUpvotingUserIds(List<String> upvotingUserIds) {
-        this.upvotingUserIds.clear();
-        this.upvotingUserIds.addAll(upvotingUserIds);
+    public void setVote(User user, boolean isUpVote) {
+        if (isUpVote) {
+            upvotingUsers.add(user);
+        } else {
+            upvotingUsers.remove(user);
+        }
+    }
+
+    @ManyToMany(foreignIndexName = "suggestionUpvotes")
+    public List<User> getUpvotingUsers() {
+        return upvotingUsers;
+    }
+
+    public void setUpvotingUsers(List<User> upvotingUsers) {
+        this.upvotingUsers = upvotingUsers;
     }
 }
