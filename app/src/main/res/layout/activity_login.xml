@@ -19,7 +19,7 @@
         android:layout_weight="0.3"
         android:contentDescription="@string/content_desc_burn_logo"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/logo" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/fb_login_button"
@@ -27,5 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:layout_weight="0.7" />
+        android:layout_weight="0.7"
+        android:textSize="20sp"
+        android:padding="50dp" />
 </LinearLayout>

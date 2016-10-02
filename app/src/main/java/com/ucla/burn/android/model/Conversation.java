@@ -1,5 +1,7 @@
 package com.ucla.burn.android.model;
 
+import com.ucla.burn.android.R;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,12 +20,35 @@ import firebomb.annotation.OneToMany;
 public class Conversation {
     private String id;
     private User owner;
+    private String title;
     private String primaryName;
     private String secondaryName;
     private boolean isCompleted = false;
     private Date lastActive;
     private List<Message> messages = new ArrayList<>();
     private Set<String> upvotingUserIds = new HashSet<>();
+
+    private static final int icon = R.drawable.ic_sentiment_satisfied_black_36dp;
+
+    private static final String[] titles = {"first", "second", "third"};
+
+    private static final String[] conversations = {"asdfasfd", "dsfasdf", "dfadsfasf"};
+
+    public static List<ListItem> getListData() {
+        List<ListItem> data = new ArrayList<>();
+
+        for (int x = 0; x < 4; x++) {
+            for (int i = 0; i < titles.length; i++) {
+                ListItem item = new ListItem();
+                item.setImageResId(icon);
+                item.setTitle(titles[i]);
+                item.setSubTitle(conversations[i]);
+                data.add(item);
+            }
+        }
+
+        return data;
+    }
 
     @Id
     @GeneratedValue
@@ -33,6 +58,14 @@ public class Conversation {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @ManyToMany(foreignIndexName = "conversations")

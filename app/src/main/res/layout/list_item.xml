@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cont_item_root"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/border"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:id="@+id/left_side"
+        android:layout_width="270dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_state_drawable">
+
+        <ImageView
+            android:id="@+id/im_item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="25dp"
+            android:src="@drawable/ic_sentiment_satisfied_black_24dp" />
+
+        <TextView
+            android:id="@+id/lbl_item_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/im_item_icon"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="48dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:text="title"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:maxLines="1" />
+
+        <TextView
+            android:id="@+id/lbl_item_sub_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_item_text"
+            android:layout_toRightOf="@id/im_item_icon"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="48dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:text="conversation"
+            android:textColor="#9E9E9E"
+            android:textSize="14sp"
+            android:maxLines="1" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/left_side">
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:singleLine="true"
+            android:text="9 m ago"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/voting"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="13dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/im_item_icon_burn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_state_drawable"
+                android:clickable="true"
+                android:paddingTop="16dp"
+                android:src="@drawable/campfire" />
+
+            <TextView
+                android:id="@+id/lbl_numvotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
