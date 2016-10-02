@@ -1,12 +1,8 @@
 package com.ucla.burn.android;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,8 +33,6 @@ public class PopularFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private static final String EXTRA_TITLE = "EXTRA_TITLE";
 
     private RecyclerView conversationListView;
     private ConversationListAdapter conversationListAdapter;
@@ -96,8 +90,7 @@ public class PopularFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, Conversation conversation, int position) {
                                 Intent intent = new Intent(getActivity(), ConversationActivity.class);
-                                Bundle extras = new Bundle();
-                                extras.putString(EXTRA_TITLE, conversation.getTitle());
+                                intent.putExtra(ConversationActivity.EXTRA_ID, conversation.getId());
                                 startActivity(intent);
                             }
                         });

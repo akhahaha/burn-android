@@ -1,10 +1,13 @@
 package com.ucla.burn.android.data;
 
+import android.telecom.Call;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ucla.burn.android.model.Conversation;
+import com.ucla.burn.android.model.Message;
 import com.ucla.burn.android.model.User;
 
 import java.util.List;
@@ -63,7 +66,7 @@ public class BurnDAO {
     }
 
     public static void updateConversation(Conversation conversation,
-                                        final Callback<Conversation> callback) {
+                                          final Callback<Conversation> callback) {
         if (conversation.getId() == null) {
             if (callback != null) callback.onFailed(new Exception("Update cannot have null Id."));
             return;
@@ -81,6 +84,23 @@ public class BurnDAO {
                 return null;
             }
         });
+    }
+
+    public static void getConversation(String id, final Callback<Conversation> callback) {
+        Firebomb.getInstance().find(Conversation.class, id)
+                .thenAccept(new Consumer<Conversation>() {
+                    @Override
+                    public void accept(Conversation conversation) {
+                        if (callback != null) callback.onResponse(conversation);
+                    }
+                })
+                .exceptionally(new Function<Throwable, Void>() {
+                    @Override
+                    public Void apply(Throwable throwable) {
+                        if (callback != null) callback.onFailed(new Exception(throwable));
+                        return null;
+                    }
+                });
     }
 
     public static void getConversations(final Callback<List<Conversation>> callback) {
@@ -101,6 +121,23 @@ public class BurnDAO {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         if (callback != null) callback.onFailed(databaseError.toException());
+                    }
+                });
+    }
+
+    public static void getMessage(String id, final Callback<Message> callback) {
+        Firebomb.getInstance().find(Message.class, id)
+                .thenAccept(new Consumer<Message>() {
+                    @Override
+                    public void accept(Message message) {
+                        if (callback != null) callback.onResponse(message);
+                    }
+                })
+                .exceptionally(new Function<Throwable, Void>() {
+                    @Override
+                    public Void apply(Throwable throwable) {
+                        if (callback != null) callback.onFailed(new Exception(throwable));
+                        return null;
                     }
                 });
     }
