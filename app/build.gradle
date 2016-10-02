@@ -30,7 +30,7 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     testCompile 'junit:junit:4.12'
     compile 'com.google.firebase:firebase-database:9.6.1'
-    compile 'firebomb:core:0.2.2'
+    compile 'firebomb:core:0.2.4'
     compile 'firebomb:firebase-android:0.2.0'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
 }
