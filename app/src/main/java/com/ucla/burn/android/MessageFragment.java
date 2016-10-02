@@ -14,14 +14,16 @@ import android.widget.TextView;
 
 public class MessageFragment extends Fragment {
     private static final String BUNDLE_SIDE_PARAM = "side";
+    private static final String BUNDLE_TEXT_PARAM = "text";
     public static final int SIDE_LEFT=0;
     public static final int SIDE_RIGHT=1;
     TextView mMessage;
 
-    public static MessageFragment newInstance(int side){
+    public static MessageFragment newInstance(int side, String text){
         MessageFragment m = new MessageFragment();
         Bundle b = new Bundle();
         b.putInt(BUNDLE_SIDE_PARAM,side);
+        b.putString(BUNDLE_TEXT_PARAM,text);
         m.setArguments(b);
         return m;
     }
@@ -39,6 +41,7 @@ public class MessageFragment extends Fragment {
 
         View v = inflater.inflate(layoutRes,container,false);
         mMessage= (TextView) v;
+        mMessage.setText(getArguments().getString(BUNDLE_TEXT_PARAM));
         return v;
     }
 }

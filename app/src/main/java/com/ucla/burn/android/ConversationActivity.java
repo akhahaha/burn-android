@@ -11,6 +11,9 @@ import com.ucla.burn.android.data.BurnDAO;
 import com.ucla.burn.android.data.Callback;
 import com.ucla.burn.android.model.Conversation;
 import com.ucla.burn.android.model.Message;
+import com.ucla.burn.android.model.Suggestion;
+
+import java.util.List;
 
 
 public class ConversationActivity extends Activity {
@@ -28,17 +31,6 @@ public class ConversationActivity extends Activity {
         mMsgSelectionPager = (WrapContentViewPager) findViewById(R.id.msg_selection_view_pager);
         conversationId = getIntent().getStringExtra(EXTRA_ID);
 
-        mMsgSelectionPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return MessageFragment.newInstance(MessageFragment.SIDE_RIGHT);
-            }
-
-            @Override
-            public int getCount() {
-                return 3;
-            }
-        });
     }
 
     @Override
@@ -50,10 +42,43 @@ public class ConversationActivity extends Activity {
     public void refresh() {
         BurnDAO.getConversation(conversationId, new Callback<Conversation>() {
             @Override
-            public void onResponse(Conversation conversation) {
-                for (Message message : conversation.getMessages()) {
-                    mConvoHolder.addView(newMessage(message.getId()));
+            public void onResponse(final Conversation conversation) {
+                for (int i=0;i<conversation.getMessages().size()-1;i++) {
+                    BurnDAO.getMessage(conversation.getMessages().get(i).getId(), new Callback<Message>() {
+                        @Override
+                        public void onResponse(Message response) {
+                            mConvoHolder.addView(newMessage(response));
+
+                        }
+
+                        @Override
+                        public void onFailed(Exception e) {
+
+                        }
+                    });
                 }
+
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+        BurnDAO.getConversationSuggestions(conversationId, new Callback<List<Suggestion>>() {
+            @Override
+            public void onResponse(final List<Suggestion> response) {
+                mMsgSelectionPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
+                    @Override
+                    public Fragment getItem(int position) {
+                        return MessageFragment.newInstance(MessageFragment.SIDE_RIGHT,response.get(position).getText());
+                    }
+
+                    @Override
+                    public int getCount() {
+                        return response.size();
+                    }
+                });
             }
 
             @Override
@@ -63,31 +88,32 @@ public class ConversationActivity extends Activity {
         });
     }
 
-    private WrapContentViewPager newMessage(String messageId) {
-        // TODO: Use BurnDAO.getMessage()
-        WrapContentViewPager message;
+    private WrapContentViewPager newMessage(final Message message) {
+        final WrapContentViewPager viewPager;
+        final int side = message.isPrimary()?MessageFragment.SIDE_RIGHT:MessageFragment.SIDE_LEFT;
 
-        final int side = 0;
+
         if (side == MessageFragment.SIDE_LEFT) {
-            message = (WrapContentViewPager) getLayoutInflater().inflate(
+            viewPager = (WrapContentViewPager) getLayoutInflater().inflate(
                     R.layout.viewpager_message_left, mConvoHolder, false);
         } else {
-            message = (WrapContentViewPager) getLayoutInflater().inflate(
+            viewPager = (WrapContentViewPager) getLayoutInflater().inflate(
                     R.layout.viewpager_message_right, mConvoHolder, false);
         }
-        message.setId(View.generateViewId());
-        message.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
+        viewPager.setId(View.generateViewId());
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return MessageFragment.newInstance(side);
+                return MessageFragment.newInstance(side,
+                        message.isContext()?message.getText():message.getSuggestions().get(position).getText());
             }
 
             @Override
             public int getCount() {
-                return 3;
+                return message.isContext()?1:message.getSuggestions().size();
             }
         });
 
-        return message;
+        return viewPager;
     }
 }
