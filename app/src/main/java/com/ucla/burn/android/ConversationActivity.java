@@ -1,5 +1,6 @@
 package com.ucla.burn.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -14,12 +15,17 @@ public class ConversationActivity extends AppCompatActivity {
     LinearLayout mConvoHolder;
     WrapContentViewPager mMsgSelectionPager;
 
+    public static final String EXTRA_ID = "EXTRA_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
         mConvoHolder = (LinearLayout) findViewById(R.id.convo_holder_linear_layout);
         mMsgSelectionPager = (WrapContentViewPager) findViewById(R.id.msg_selection_view_pager);
+
+        String ID = getIntent().getStringExtra(EXTRA_ID);
+        
 
         mConvoHolder.addView(newMessage(MessageFragment.SIDE_LEFT));
         mConvoHolder.addView(newMessage(MessageFragment.SIDE_RIGHT));

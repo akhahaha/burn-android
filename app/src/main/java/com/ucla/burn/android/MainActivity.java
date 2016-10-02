@@ -25,7 +25,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String EXTRA_TITLE = "EXTRA_TITLE";
+
 
     private RecyclerView conversationListView;
     private ConversationListAdapter conversationListAdapter;
@@ -76,8 +76,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onItemClick(View view, Conversation conversation, int position) {
                         Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
-                        Bundle extras = new Bundle();
-                        extras.putString(EXTRA_TITLE, conversation.getTitle());
+                        intent.putExtra(ConversationActivity.EXTRA_ID, conversation.getId());
                         startActivity(intent);
                     }
                 });
