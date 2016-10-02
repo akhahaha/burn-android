@@ -31,6 +31,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
+                e.printStackTrace();
             }
         });
     }

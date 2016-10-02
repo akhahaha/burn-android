@@ -1,7 +1,6 @@
 package com.ucla.burn.android;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class InputActivity extends Activity {

@@ -5,11 +5,9 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ucla.burn.android.InputActivity;
 import com.ucla.burn.android.R;
 import com.ucla.burn.android.Session;
 import com.ucla.burn.android.data.BurnDAO;

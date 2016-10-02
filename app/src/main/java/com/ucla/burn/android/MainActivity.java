@@ -73,13 +73,13 @@ public class MainActivity extends AppCompatActivity
                 conversationListAdapter = new ConversationListAdapter(conversations);
                 conversationListAdapter.setOnItemClickListener(
                         new ConversationListAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, Conversation conversation, int position) {
-                        Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
-                        intent.putExtra(ConversationActivity.EXTRA_ID, conversation.getId());
-                        startActivity(intent);
-                    }
-                });
+                            @Override
+                            public void onItemClick(View view, Conversation conversation, int position) {
+                                Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
+                                intent.putExtra(ConversationActivity.EXTRA_ID, conversation.getId());
+                                startActivity(intent);
+                            }
+                        });
                 conversationListView.setAdapter(conversationListAdapter);
             }
 

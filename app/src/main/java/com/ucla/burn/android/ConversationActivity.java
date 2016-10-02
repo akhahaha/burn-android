@@ -1,8 +1,6 @@
 package com.ucla.burn.android;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
@@ -45,7 +43,7 @@ public class ConversationActivity extends Activity {
         BurnDAO.getConversation(conversationId, new Callback<Conversation>() {
             @Override
             public void onResponse(final Conversation conversation) {
-                for (int i=0;i<conversation.getMessages().size()-1;i++) {
+                for (int i = 0; i < conversation.getMessages().size() - 1; i++) {
                     BurnDAO.getMessage(conversation.getMessages().get(i).getId(), new Callback<Message>() {
                         @Override
                         public void onResponse(Message response) {
@@ -73,7 +71,7 @@ public class ConversationActivity extends Activity {
                 mMsgSelectionPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
                     @Override
                     public Fragment getItem(int position) {
-                        return MessageFragment.newInstance(MessageFragment.SIDE_RIGHT,response.get(position).getText());
+                        return MessageFragment.newInstance(MessageFragment.SIDE_RIGHT, response.get(position).getText());
                     }
 
                     @Override
@@ -92,7 +90,7 @@ public class ConversationActivity extends Activity {
 
     private WrapContentViewPager newMessage(final Message message) {
         final WrapContentViewPager viewPager;
-        final int side = message.isPrimary()?MessageFragment.SIDE_RIGHT:MessageFragment.SIDE_LEFT;
+        final int side = message.isPrimary() ? MessageFragment.SIDE_RIGHT : MessageFragment.SIDE_LEFT;
 
 
         if (side == MessageFragment.SIDE_LEFT) {
@@ -107,12 +105,12 @@ public class ConversationActivity extends Activity {
             @Override
             public Fragment getItem(int position) {
                 return MessageFragment.newInstance(side,
-                        message.isContext()?message.getText():message.getSuggestions().get(position).getText());
+                        message.isContext() ? message.getText() : message.getSuggestions().get(position).getText());
             }
 
             @Override
             public int getCount() {
-                return message.isContext()?1:message.getSuggestions().size();
+                return message.isContext() ? 1 : message.getSuggestions().size();
             }
         });
 
