@@ -1,6 +1,7 @@
 package com.ucla.burn.android.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +103,9 @@ public class ConversationListAdapter
             holder.burn.setImageResource(R.drawable.campfire);
         }
 
+        long currentTime = System.currentTimeMillis();
+        holder.time.setText(DateUtils.getRelativeTimeSpanString(item.getLastActive().getTime(),
+                currentTime, DateUtils.MINUTE_IN_MILLIS));
         holder.numvotes.setText(String.valueOf(item.getScore()));
     }
 
@@ -116,6 +120,7 @@ public class ConversationListAdapter
         ImageView icon;
         ImageView burn;
         TextView numvotes;
+        TextView time;
 
         public BurnHolder(View itemView) {
             super(itemView);
@@ -124,6 +129,7 @@ public class ConversationListAdapter
             icon = (ImageView) itemView.findViewById(R.id.im_item_icon);
             burn = (ImageView) itemView.findViewById(R.id.im_item_icon_burn);
             numvotes = (TextView) itemView.findViewById(R.id.lbl_numvotes);
+            time = (TextView) itemView.findViewById(R.id.time);
         }
     }
 }
