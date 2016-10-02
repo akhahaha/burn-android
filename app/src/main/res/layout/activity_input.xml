@@ -9,34 +9,46 @@
     android:paddingRight="40dp"
     tools:context="com.ucla.burn.android.InputActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
     <TextView
         android:id="@+id/username"
-        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="placeholder_handle"
-        />
+        android:layout_marginTop="40dp"
+        android:text="placeholder_handle" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/username"
-            android:text="What's causing the burn?"
-            android:textSize="16sp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="0.07" />
 
-        <Button
-            android:paddingTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit"/>
+    <EditText
+        android:id="@+id/lbl_content_submitted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="What's causing the burn?"
+        android:textSize="16sp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/lbl_title" />
 
-    </LinearLayout>
+    <EditText
+        android:id="@+id/lbl_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title the conversation"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/username"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp" />
+
+    <Button
+        android:id="@+id/itm_submit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="SUBMIT:"
+        android:textColor="#546E7A"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:paddingBottom="40dp"
+        android:paddingTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:background="#ECEFF1"
+        android:clickable="true"/>
+
 </RelativeLayout>
