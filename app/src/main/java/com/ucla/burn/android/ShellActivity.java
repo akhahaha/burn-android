@@ -7,15 +7,20 @@ import android.app.FragmentTransaction;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ShellActivity extends Activity implements ActionBar.TabListener {
@@ -46,7 +51,6 @@ public class ShellActivity extends Activity implements ActionBar.TabListener {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -134,7 +138,7 @@ public class ShellActivity extends Activity implements ActionBar.TabListener {
                 case 1:
                     return PopularFragment.newInstance(1);
                 case 2:
-                    return ProfileFragment.newInstance();
+                    return ProfileFragment.newInstance(0);
             }
             return null;
         }

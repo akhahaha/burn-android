@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.ucla.burn.android.adapter.ConversationListAdapter;
 import com.ucla.burn.android.data.BurnDAO;
@@ -71,6 +72,14 @@ public class PopularFragment extends Fragment {
         conversationListView = (RecyclerView) rootView.findViewById(R.id.conversation_list_view);
         conversationListView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        Button newconvo = (Button) rootView.findViewById(R.id.itm_newconvo);
+        newconvo.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), InputActivity.class);
+                startActivity(intent);
+            }
+        }));
         return rootView;
     }
 

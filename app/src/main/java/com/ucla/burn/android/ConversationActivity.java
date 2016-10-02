@@ -1,6 +1,8 @@
 package com.ucla.burn.android;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
