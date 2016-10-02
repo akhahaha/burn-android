@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.ucla.burn.android.data.BurnDAO;
@@ -13,6 +15,7 @@ import com.ucla.burn.android.model.Conversation;
 import com.ucla.burn.android.model.Message;
 import com.ucla.burn.android.model.Suggestion;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -20,6 +23,8 @@ public class ConversationActivity extends Activity {
     private String conversationId;
     LinearLayout mConvoHolder;
     WrapContentViewPager mMsgSelectionPager;
+    EditText messageField;
+    Button submitButton;
 
     public static final String EXTRA_ID = "EXTRA_ID";
 
@@ -30,7 +35,8 @@ public class ConversationActivity extends Activity {
         mConvoHolder = (LinearLayout) findViewById(R.id.convo_holder_linear_layout);
         mMsgSelectionPager = (WrapContentViewPager) findViewById(R.id.msg_selection_view_pager);
         conversationId = getIntent().getStringExtra(EXTRA_ID);
-
+        messageField = (EditText) findViewById(R.id.message_field);
+        submitButton = (Button) findViewById(R.id.submit_button);
     }
 
     @Override
@@ -40,6 +46,7 @@ public class ConversationActivity extends Activity {
     }
 
     public void refresh() {
+        mConvoHolder.removeAllViews();
         BurnDAO.getConversation(conversationId, new Callback<Conversation>() {
             @Override
             public void onResponse(final Conversation conversation) {
@@ -58,6 +65,32 @@ public class ConversationActivity extends Activity {
                     });
                 }
 
+
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (messageField.getText().toString() != null && !messageField.getText().toString().isEmpty()) {
+                            // Get last message
+                            Message message = conversation.getMessages().get(conversation.getMessages().size() - 1);
+                            Suggestion suggestion = new Suggestion();
+                            suggestion.setSuggester(Session.getInstance().getCurrentUser());
+                            suggestion.setMessage(message);
+                            suggestion.setText(messageField.getText().toString());
+                            suggestion.setCreated(new Date(System.currentTimeMillis()));
+                            BurnDAO.pushSuggestion(suggestion, new Callback<Suggestion>() {
+                                @Override
+                                public void onResponse(Suggestion response) {
+                                    refresh();
+                                }
+
+                                @Override
+                                public void onFailed(Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    }
+                });
             }
 
             @Override

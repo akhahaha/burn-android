@@ -234,6 +234,48 @@ public class BurnDAO {
 
     }
 
+    public static void getConversationMessages(String conversationId,
+                                               final Callback<List<Message>> callback) {
+        Firebomb.getInstance().find(Conversation.class, conversationId)
+                .thenAccept(new Consumer<Conversation>() {
+                    @Override
+                    public void accept(Conversation conversation) {
+                        if (conversation == null || conversation.getMessages().isEmpty()) {
+                            if (callback != null) callback.onResponse(new ArrayList<Message>());
+                            return;
+                        }
+
+                        final List<Message> messages = new ArrayList<>();
+                        CompletableFuture<?>[] messagePromises =
+                                new CompletableFuture<?>[conversation.getMessages().size()];
+                        for (int i = 0; i < conversation.getMessages().size(); i++) {
+                            messagePromises[i] = Firebomb.getInstance().find(Message.class,
+                                    conversation.getMessages().get(i).getId())
+                                    .thenAccept(new Consumer<Message>() {
+                                        @Override
+                                        public void accept(Message message) {
+                                            messages.add(message);
+                                        }
+                                    }).exceptionally(new Function<Throwable, Void>() {
+                                        @Override
+                                        public Void apply(Throwable throwable) {
+                                            throwable.printStackTrace();
+                                            return null;
+                                        }
+                                    });
+                        }
+
+                        CompletableFuture.allOf(messagePromises)
+                                .thenAccept(new Consumer<Void>() {
+                                    @Override
+                                    public void accept(Void aVoid) {
+                                        if (callback != null) callback.onResponse(messages);
+                                    }
+                                });
+                    }
+                });
+    }
+
     public static void getConversationSuggestions(String conversationId,
                                                   final Callback<List<Suggestion>> callback) {
         Firebomb.getInstance().find(Conversation.class, conversationId)
