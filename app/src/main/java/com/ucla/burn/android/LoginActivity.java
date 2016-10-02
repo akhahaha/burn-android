@@ -37,7 +37,7 @@ public class LoginActivity extends Activity {
                     Facebook.getUser(loginResult.getAccessToken(), new Callback<User>() {
                         @Override
                         public void onResponse(final User fbUser) {
-                            BurnDAO.findUser(fbUser.getId(), new Callback<User>() {
+                            BurnDAO.getUser(fbUser.getId(), new Callback<User>() {
                                 @Override
                                 public void onResponse(final User burnUser) {
                                     if (burnUser != null) {
@@ -48,7 +48,7 @@ public class LoginActivity extends Activity {
                                         finish();
                                     } else {
                                         // New user
-                                        BurnDAO.createUser(fbUser, new Callback<Void>() {
+                                        BurnDAO.upsertUser(fbUser, new Callback<Void>() {
                                             @Override
                                             public void onResponse(Void aVoid) {
                                                 session.setCurrentUser(

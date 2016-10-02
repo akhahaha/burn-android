@@ -64,7 +64,7 @@ public class Session {
             return;
         }
 
-        BurnDAO.findUser(currentUserID, new Callback<User>() {
+        BurnDAO.getUser(currentUserID, new Callback<User>() {
             @Override
             public void onResponse(User user) {
                 if (user != null) {
