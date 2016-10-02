@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Boolean success) {
                 if (success && session.isActive()) {
                     // Logged in
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ShellActivity.class));
                     finish();
                 } else {
                     // Not logged in

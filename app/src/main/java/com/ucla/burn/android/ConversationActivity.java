@@ -1,16 +1,21 @@
 package com.ucla.burn.android;
 
+<<<<<<< Updated upstream
+=======
+import android.app.Activity;
+>>>>>>> Stashed changes
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
 
-public class ConversationActivity extends AppCompatActivity {
+public class ConversationActivity extends Activity {
 
     LinearLayout mConvoHolder;
     WrapContentViewPager mMsgSelectionPager;
@@ -33,7 +38,7 @@ public class ConversationActivity extends AppCompatActivity {
         mConvoHolder.addView(newMessage(MessageFragment.SIDE_LEFT));
         mConvoHolder.addView(newMessage(MessageFragment.SIDE_RIGHT));
         mConvoHolder.addView(newMessage(MessageFragment.SIDE_RIGHT));
-        mMsgSelectionPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        mMsgSelectionPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return MessageFragment.newInstance(MessageFragment.SIDE_RIGHT);
@@ -58,7 +63,7 @@ public class ConversationActivity extends AppCompatActivity {
 
         ViewPager.LayoutParams layoutParams = new ViewPager.LayoutParams();
 
-        message.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        message.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return MessageFragment.newInstance(side);

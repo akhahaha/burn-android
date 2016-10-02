@@ -44,7 +44,7 @@ public class LoginActivity extends Activity {
                                         // Pre-existing user
                                         session.setCurrentUser(getApplicationContext(), burnUser);
                                         startActivity(new Intent(getApplicationContext(),
-                                                MainActivity.class));
+                                                ShellActivity.class));
                                         finish();
                                     } else {
                                         // New user
@@ -55,7 +55,7 @@ public class LoginActivity extends Activity {
                                                         getApplicationContext(), fbUser);
                                                 // TODO: Perform onboarding
                                                 startActivity(new Intent(getApplicationContext(),
-                                                        MainActivity.class));
+                                                        ShellActivity.class));
                                                 finish();
                                             }
 
