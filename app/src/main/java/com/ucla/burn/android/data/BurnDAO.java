@@ -62,6 +62,27 @@ public class BurnDAO {
         });
     }
 
+    public static void updateConversation(Conversation conversation,
+                                        final Callback<Conversation> callback) {
+        if (conversation.getId() == null) {
+            if (callback != null) callback.onFailed(new Exception("Update cannot have null Id."));
+            return;
+        }
+
+        Firebomb.getInstance().persist(conversation).thenAccept(new Consumer<Conversation>() {
+            @Override
+            public void accept(Conversation conversation) {
+                if (callback != null) callback.onResponse(conversation);
+            }
+        }).exceptionally(new Function<Throwable, Void>() {
+            @Override
+            public Void apply(Throwable throwable) {
+                if (callback != null) callback.onFailed(new Exception(throwable));
+                return null;
+            }
+        });
+    }
+
     public static void getConversations(final Callback<List<Conversation>> callback) {
         FirebaseDatabase.getInstance().getReference().child("v1/conversations")
                 .addListenerForSingleValueEvent(new ValueEventListener() {

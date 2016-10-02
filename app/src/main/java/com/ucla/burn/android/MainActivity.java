@@ -16,32 +16,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.ucla.burn.android.adapter.BurnAdapter;
+import com.ucla.burn.android.adapter.ConversationListAdapter;
+import com.ucla.burn.android.data.BurnDAO;
+import com.ucla.burn.android.data.Callback;
 import com.ucla.burn.android.model.Conversation;
-import com.ucla.burn.android.model.ListItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        BurnAdapter.ItemClickCallBack {
-    private Session session;
+        implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String EXTRA_TITLE = "EXTRA_TITLE";
 
-
-    private static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
-    private static final String EXTRA_QUOTE = "EXTRA_QUOTE";
-    private static final String EXTRA_ATTR = "EXTRA_ATTR";
-
-    private RecyclerView recView;
-    private BurnAdapter adapter;
-    private ArrayList listData;
-
+    private RecyclerView conversationListView;
+    private ConversationListAdapter conversationListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        session = Session.getInstance();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -65,14 +56,39 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        listData = (ArrayList) Conversation.getListData();
+        conversationListView = (RecyclerView) findViewById(R.id.conversation_list_view);
+        conversationListView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-        recView = (RecyclerView) findViewById(R.id.rec_list);
-        recView.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
 
-        adapter = new BurnAdapter(Conversation.getListData(), this);
-        recView.setAdapter(adapter);
-        adapter.setItemClickCallBack(this);
+    public void refresh() {
+        BurnDAO.getConversations(new Callback<List<Conversation>>() {
+            @Override
+            public void onResponse(List<Conversation> conversations) {
+                conversationListAdapter = new ConversationListAdapter(conversations);
+                conversationListAdapter.setOnItemClickListener(
+                        new ConversationListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, Conversation conversation, int position) {
+                        Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString(EXTRA_TITLE, conversation.getTitle());
+                        startActivity(intent);
+                    }
+                });
+                conversationListView.setAdapter(conversationListAdapter);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
     }
 
     @Override
@@ -130,16 +146,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onItemClick(int p) {
-        ListItem item = (ListItem) listData.get(p);
-        Intent i = new Intent(this, ConversationActivity.class);
-        Bundle extras = new Bundle();
-        extras.putString(EXTRA_QUOTE, item.getTitle());
-        extras.putString(EXTRA_ATTR, item.getSubTitle());
-        i.putExtra(BUNDLE_EXTRAS, extras);
-        startActivity(i);
     }
 }
