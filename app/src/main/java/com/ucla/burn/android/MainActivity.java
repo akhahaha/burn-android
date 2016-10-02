@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(int p) {
         ListItem item = (ListItem) listData.get(p);
-        Intent i = new Intent(this, DetailActivity.class);
+        Intent i = new Intent(this, ConversationActivity.class);
         Bundle extras = new Bundle();
         extras.putString(EXTRA_QUOTE, item.getTitle());
         extras.putString(EXTRA_ATTR, item.getSubTitle());

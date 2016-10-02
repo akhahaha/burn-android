@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_conversation"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context=".ConversationActivity"
+    >
+
+   <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+       android:fillViewport="true">
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/convo_holder_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            >
+        </LinearLayout>
+   </ScrollView>
+
+    <com.ucla.burn.android.WrapContentViewPager
+        android:layout_margin="10dp"
+        android:id="@+id/msg_selection_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    </com.ucla.burn.android.WrapContentViewPager>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            tools:text="Insert text here......"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add suggestion"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add to context"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
