@@ -10,6 +10,7 @@ import com.ucla.burn.android.model.Suggestion;
 import com.ucla.burn.android.model.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import firebomb.Firebomb;
@@ -45,6 +46,60 @@ public class BurnDAO {
             public Void apply(Throwable throwable) {
                 if (callback != null) callback.onFailed(new Exception(throwable));
                 return null;
+            }
+        });
+    }
+
+    public static void createConversation(User user, String title, final String contextMessage,
+                                          final Callback<Conversation> callback) {
+        Conversation topush = new Conversation();
+        topush.setTitle(title);
+        topush.setOwner(user);
+        topush.setCompleted(false);
+        topush.setLastActive(new Date());
+        // TODO: Get names
+        topush.setPrimaryName("A");
+        topush.setSecondaryName("B");
+        BurnDAO.pushConversation(topush, new Callback<Conversation>() {
+            @Override
+            public void onResponse(final Conversation conversation) {
+                // Push initial context message
+                final Message message = new Message();
+                message.setContext(true);
+                message.setPrimary(true);
+                message.setConversation(conversation);
+                message.setText(contextMessage);
+                BurnDAO.pushMessage(message, new Callback<Message>() {
+                    @Override
+                    public void onResponse(Message response) {
+                        // Push blank message for suggestions
+                        Message blank = new Message();
+                        blank.setContext(false);
+                        blank.setPrimary(true);
+                        blank.setConversation(conversation);
+                        BurnDAO.pushMessage(blank, new Callback<Message>() {
+                            @Override
+                            public void onResponse(Message response) {
+                                if (callback != null) callback.onResponse(conversation);
+                            }
+
+                            @Override
+                            public void onFailed(Exception e) {
+                                if (callback != null) callback.onFailed(e);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        if (callback != null) callback.onFailed(e);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                if (callback != null) callback.onFailed(e);
             }
         });
     }
